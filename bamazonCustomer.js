@@ -14,30 +14,41 @@ var connection = mysql.createConnection({
   database: "bamazon"
 });
 
-connection.connect(function(error) {
-  if (error) throw error;
-  //start();
-});
 
-function prompt() {
+function validateIn(val){
+  var int = Number.isInteger(parseFloat(val));
+  var sign = Math.sign(val);
+
+  if(int && (sign === 1)){
+    return true;
+  }else{
+    return "Please enter an integer."
+  }
+}
+
+function transact() {
   inquirer
     .prompt({
       type: "input",
       name: "item_id",
       message: "Enter an ID for a product you would like to purchase",
+      validate: validateIn,
+      filter: Number
     },
     {
       type: "input",
       name: "quantity",
       message: "How many would you like to have?",
-    }).then(function(answer) {
+      validate: validateIn,
+      filter: Number
+    }).then(function(input) {
 
       var item = input.item_id;
       var quantity = input.quantity;
 
       var qstr = "SELECT * FROM products WHERE ?";
 
-      connection.query(qstr, {item_id: item}, function(err, data){
+      connection.query(qstr, {item_id: item}, function(error, data){
         if(data.length === 0){
           console.log("Invalid ID");
           inventory();
@@ -82,7 +93,7 @@ function inventory(){
         offers += "Price ($): " + data[i].price + " ";
         console.log(offers)
       }
-    prompt();
+    transact();
     // }
       
     // const table = cTable.getTable([{
