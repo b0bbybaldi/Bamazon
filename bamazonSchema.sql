@@ -11,3 +11,6 @@ CREATE TABLE products(
   quantity INT default 0,
   PRIMARY KEY (id)
 );
+
+INSERT INTO products (item_name, category, price, quantity)
+VALUES ("Iron Man's Helmet", "Electronics", 20, 1), ("Thor's Hammer", "Power Tools", 15, 1), ("Wonder Woman's Shield", "Toys", 5, 1);
