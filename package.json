@@ -19,6 +19,7 @@
   "homepage": "https://github.com/b0bbybaldi/Bamazon#readme",
   "dependencies": {
     "cli": "^1.0.1",
+    "console.table": "^0.10.0",
     "inquirer": "^5.2.0",
     "mysql": "^2.15.0"
   }
