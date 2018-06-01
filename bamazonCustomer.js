@@ -28,7 +28,7 @@ function validateIn(val){
 
 function transact() {
   inquirer
-    .prompt({
+    .prompt([{
       type: "input",
       name: "item_id",
       message: "Enter an ID for a product you would like to purchase",
@@ -41,7 +41,7 @@ function transact() {
       message: "How many would you like to have?",
       validate: validateIn,
       filter: Number
-    }).then(function(input) {
+    }]).then(function(input) {
 
       var item = input.item_id;
       var quantity = input.quantity;
@@ -49,19 +49,21 @@ function transact() {
       var qstr = "SELECT * FROM products WHERE ?";
 
       connection.query(qstr, {item_id: item}, function(error, data){
+        if (error) throw error;
+
         if(data.length === 0){
           console.log("Invalid ID");
           inventory();
         }else{
-          var pdata = data[0];
+          var pData = data[0];
 
-          if(quantity <= pdata.stock_quantity){
+          if(quantity < pData.stock_quantity){
             console.log("Congratz this item is available!")
-            var updateqstr = "UPDATE products SET stock_quantity = " + pdata.stock_quantity - quantity + " WHERE item_id = " + item;
+            var updateQ = "UPDATE products SET stock_quantity = " + pData.stock_quantity - quantity + " WHERE item_id = " + item;
           
-            connection.query(updateqstr, function(error, data){
+            connection.query(updateQ, function(error, data){
               if (error) throw error;
-              console.log("Your order had been placed for a total of: " + pdata.price * quantity);
+              console.log("Your order had been placed for a total of: " + pData.price * quantity);
               connection.end();
             })
           }else{
