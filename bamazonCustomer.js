@@ -1,7 +1,7 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
-var cli = require("cli");
-var cTable = require("console.table");
+// var cli = require("cli");
+// var cTable = require("console.table");
 
 var connection = mysql.createConnection({
   host: "localhost",
@@ -46,43 +46,43 @@ function transact() {
       var item = input.item_id;
       var quantity = input.quantity;
 
-      var qstr = "SELECT * FROM products WHERE ?";
+      var queryString = "SELECT * FROM products WHERE ?";
 
-      connection.query(qstr, {item_id: item}, function(error, data){
+      connection.query(queryString, {item_id: item}, function(error, data){
         if (error) throw error;
 
         if(data.length === 0){
-          console.log("Invalid ID");
-          inventory();
+          console.log("\n Invalid ID \n");
+          inventoryDisp();
         }else{
-          var pData = data[0];
+          var prodData = data[0];
 
-          if(quantity < pData.stock_quantity){
-            console.log("Congratz this item is available!")
-            var updateQ = "UPDATE products SET stock_quantity = " + pData.stock_quantity - quantity + " WHERE item_id = " + item;
+          if(quantity < prodData.stock_quantity){
+            console.log("\n Congratz this item is available! \n")
+            var updateQ = "UPDATE products SET stock_quantity = " + (prodData.stock_quantity - quantity) + " WHERE item_id = " + item;
           
             connection.query(updateQ, function(error, data){
               if (error) throw error;
-              console.log("Your order had been placed for a total of: " + pData.price * quantity);
+              console.log("\n Your order had been placed for a total of: " + prodData.price * quantity+"\n");
               connection.end();
             })
           }else{
-            console.log("Sorry the item is out of stock...")
-            inventory();
+            console.log("\n Sorry the item is out of stock... \n")
+            inventoryDisp();
           }
         }
       })
     });
 }
 
-function inventory(){
+function inventoryDisp(){
 
-  qstr = "SELECT * FROM products";
+  queryString = "SELECT * FROM products";
 
-  connection.query(qstr, function(error, data){
+  connection.query(queryString, function(error, data){
     if (error) throw error;
 
-    console.log("Inventory Available:\n")
+    console.log("\n Inventory Available:\n")
 
     var offers = "";
 
@@ -109,7 +109,7 @@ function inventory(){
 
 function start(){
 
-  inventory();
+  inventoryDisp();
 
 }
 
