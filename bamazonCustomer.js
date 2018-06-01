@@ -1,6 +1,7 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
 var cli = require("cli");
+var console.table = require("console.table");
 
 var connection = mysql.createConnection({
   host: "localhost",
@@ -63,9 +64,33 @@ function prompt() {
 
 function inventory(){
 
+  qstr = "SELECT * FROM products";
 
+  connection.query(qstr, function(error, data){
+    if (error) throw error;
 
+    console.log("Inventory Available:\n")
 
+    var offers = "";
+
+    var offerdisplay =  function(){
+      for(var i=0; i<data.length; i++){
+        offers = "";
+        offers += "ID: " + data[i].item_id + "/n";
+        offers += "Name: " + data[i].product_name + "/n";
+        offers += "Category: " + data[i].department_name + "/n";
+        offers += "Price ($): " + data[i].price + "/n";
+      }
+      prompt();
+    }
+
+    const table = cTable.getTable([{
+      offerdisplay
+    }])
+
+      console.log(table);
+
+  })
 }
 
 function start(){
@@ -74,7 +99,7 @@ function start(){
 
 }
 
-//start();
+start();
 
 
 // function sellProduct() {
