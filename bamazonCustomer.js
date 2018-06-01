@@ -76,10 +76,10 @@ function sellProduct() {
       connection.query(
         "INSERT INTO auctions SET ?",
         {
-          item_name: answer.item,
-          category: answer.category,
+          product_name: answer.product_name,
+          department_name: answer.department_name,
           price: answer.price,
-          quantity: answer.quantity
+          stock_quantity: answer.stock_quantity
         },
         function(err) {
           if (err) throw err;
