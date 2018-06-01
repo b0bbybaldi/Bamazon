@@ -61,6 +61,21 @@ function prompt() {
     });
 }
 
+function inventory(){
+
+
+
+
+}
+
+function start(){
+
+  inventory();
+
+}
+
+//start();
+
 
 // function sellProduct() {
 //   inquirer
