@@ -1,7 +1,7 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
 var cli = require("cli");
-var console.table = require("console.table");
+var cTable = require("console.table");
 
 var connection = mysql.createConnection({
   host: "localhost",
@@ -14,9 +14,9 @@ var connection = mysql.createConnection({
   database: "bamazon"
 });
 
-connection.connect(function(err) {
-  if (err) throw err;
-  start();
+connection.connect(function(error) {
+  if (error) throw error;
+  //start();
 });
 
 function prompt() {
@@ -37,7 +37,7 @@ function prompt() {
 
       var qstr = "SELECT * FROM products WHERE ?";
 
-      connection.query(qstr, {item-id: item}, function(err, data){
+      connection.query(qstr, {item_id: item}, function(err, data){
         if(data.length === 0){
           console.log("Invalid ID");
           inventory();
@@ -73,22 +73,23 @@ function inventory(){
 
     var offers = "";
 
-    var offerdisplay =  function(){
+    // var offerdisplay =  function(){
       for(var i=0; i<data.length; i++){
         offers = "";
-        offers += "ID: " + data[i].item_id + "/n";
-        offers += "Name: " + data[i].product_name + "/n";
-        offers += "Category: " + data[i].department_name + "/n";
-        offers += "Price ($): " + data[i].price + "/n";
+        offers += "ID: " + data[i].item_id + " ";
+        offers += "Name: " + data[i].product_name + " ";
+        offers += "Category: " + data[i].department_name + " ";
+        offers += "Price ($): " + data[i].price + " ";
+        console.log(offers)
       }
-      prompt();
-    }
+    prompt();
+    // }
+      
+    // const table = cTable.getTable([{
+      // console.log(offerdisplay)
+    // }])
 
-    const table = cTable.getTable([{
-      offerdisplay
-    }])
-
-      console.log(table);
+      // console.log(table);
 
   })
 }
